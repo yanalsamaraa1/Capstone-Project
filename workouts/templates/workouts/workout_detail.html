@@ -1,16 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ workout.name }} - Details</title>
-</head>
-<body>
-    <h1>{{ workout.name }}</h1>
-    <p><strong>Date:</strong> {{ workout.date }}</p>
+{% extends 'workouts/base.html' %}
+
+{% block title %}Workout Details{% endblock %}
+
+{% block content %}
+<h2>Workout Details</h2>
+
+<div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 0 5px rgba(0,0,0,0.1);">
+    <p><strong>Name:</strong> {{ workout.name }}</p>
     <p><strong>Weight:</strong> {{ workout.weight }} kg</p>
     <p><strong>Reps:</strong> {{ workout.reps }}</p>
+    <p><strong>Date:</strong> {{ workout.date }}</p>
+</div>
 
-    <a href="/">← Back to Dashboard</a>
-</body>
-</html>
+<p style="margin-top:15px;">
+    <a href="{% url 'edit_workout' workout.id %}" class="button">✏️ Edit</a>
+    <a href="{% url 'delete_workout' workout.id %}" class="button danger">🗑️ Delete</a>
+    <a href="{% url 'dashboard' %}" class="button">⬅️ Back to Dashboard</a>
+</p>
+{% endblock %}

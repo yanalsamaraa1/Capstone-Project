@@ -119,4 +119,17 @@ def delete_workout(request, id):
         return redirect('dashboard')
 
     return render(request, 'workouts/delete_workout.html', {'workout': workout})
+    # ---------- DELETE ACCOUNT ----------
+def delete_account(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        messages.success(request, 'Your account and all associated workouts have been deleted.')
+        return redirect('login')
+
+    return render(request, 'workouts/delete_account.html')
+
 

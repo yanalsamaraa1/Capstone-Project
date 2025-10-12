@@ -1,0 +1,16 @@
+{% extends 'workouts/base.html' %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block content %}
+<h2>Delete Account</h2>
+<p>Are you sure you want to permanently delete your account?</p>
+<p>This will remove <strong>all your workouts</strong> and cannot be undone.</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="danger">Yes, delete my account</button>
+</form>
+
+<a href="{% url 'dashboard' %}" class="button">Cancel</a>
+{% endblock %}

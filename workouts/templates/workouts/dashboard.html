@@ -1,37 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitTrack Dashboard</title>
-</head>
-<body>
-    <h1>Welcome to FitTrack</h1>
+{% extends 'workouts/base.html' %}
 
-    <p>
-        <a href="{% url 'add_workout' %}">➕ Add Workout</a> |
-        <a href="{% url 'logout' %}">🚪 Logout</a>
-    </p>
+{% block title %}Dashboard{% endblock %}
 
-    <h2>Your Workouts</h2>
+{% block content %}
+<h2>Your Workouts</h2>
 
-    {% if workouts %}
-        <ul>
-            {% for w in workouts %}
-                <li>
-                    <strong>{{ w.name }}</strong> — {{ w.weight }}kg × {{ w.reps }} reps ({{ w.date }})  
-                    <br>
-                    <b>ID:</b> {{ w.id }}
-                    <br>
-                    <a href="{% url 'workout_detail' w.id %}">🔍 View</a> |
-                    <a href="{% url 'edit_workout' w.id %}">✏️ Edit</a>
-                    | <a href="{% url 'delete_workout' w.id %}" style="color:red;">🗑️ Delete</a>
-
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No workouts yet. <a href="{% url 'add_workout' %}">Add one here</a>.</p>
-    {% endif %}
-</body>
-</html>
+{% if workouts %}
+    <ul>
+        {% for w in workouts %}
+            <li>
+                <strong>{{ w.name }}</strong> — {{ w.weight }}kg × {{ w.reps }} reps ({{ w.date }})<br>
+                <a href="{% url 'workout_detail' w.id %}" class="button">View</a>
+                <a href="{% url 'edit_workout' w.id %}" class="button">Edit</a>
+                <a href="{% url 'delete_workout' w.id %}" class="button danger">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No workouts yet. <a href="{% url 'add_workout' %}" class="button">Add one here</a>.</p>
+{% endif %}
+{% endblock %}
