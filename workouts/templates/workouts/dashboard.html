@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>FitTrack Dashboard</title></head>
+<body>
+  <h1>Welcome to FitTrack</h1>
+  <h2>Your Workouts</h2>
+
+  {% if workouts %}
+    <ul>
+      {% for w in workouts %}
+        <li>{{ w.name }} — {{ w.date }} ({{ w.category }})</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No workouts yet.</p>
+  {% endif %}
+</body>
+</html>
