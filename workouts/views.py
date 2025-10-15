@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .models import Workout
 from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+from .models import Workout, Exercise
 
 
 # ---------- DASHBOARD ----------
@@ -20,7 +21,6 @@ def workout_detail(request, id):
     if not request.user.is_authenticated:
         return redirect('login')
 
-    from .models import Exercise  # ensure Exercise is available
     workout = get_object_or_404(Workout, id=id, user=request.user)
     exercises = Exercise.objects.filter(workout=workout)
 
@@ -28,7 +28,6 @@ def workout_detail(request, id):
         'workout': workout,
         'exercises': exercises
     })
-
 
 
 # ---------- REGISTER ----------
@@ -75,10 +74,37 @@ def logout_user(request):
     messages.success(request, 'Logged out successfully.')
     return redirect('login')
 
+
+# ---------- CLASS-BASED VIEWS ----------
 class WorkoutCreate(CreateView):
     model = Workout
-    fields = '__all__'
+    fields =  fields = ['name', 'muscle_group', 'notes',]
     success_url = '/'
+ # This inherited method is called when a
+    # valid cat form is being submitted
+    def form_valid(self, form):
+        # Assign the logged in user (self.request.user)
+        form.instance.user = self.request.user  # form.instance is the cat
+        # Let the CreateView do its job as usual
+        return super().form_valid(form)
+    def get_success_url(self):
+        # Redirect to a custom page after saving new data
+        return reverse_lazy('dashboard')  # replace 'dashboard' with your URL name
+
+class ExerciseCreate(CreateView):
+    model = Exercise
+    fields = ['workout', 'sets', 'reps','weight','notes']
+    success_url = '/'
+    def form_valid(self, form):
+        # Assign the logged in user (self.request.user)
+        form.instance.user = self.request.user  # form.instance is the cat
+        # Let the CreateView do its job as usual
+        return super().form_valid(form)
+    def get_success_url(self):
+        # Redirect to a custom page after saving new data
+        return reverse_lazy('dashboard')  # replace 'dashboard' with your URL name
+
+
 # ---------- ADD WORKOUT ----------
 def add_workout(request):
     if not request.user.is_authenticated:
@@ -86,7 +112,7 @@ def add_workout(request):
 
     if request.method == 'POST':
         name = request.POST['name']
-        muscle_group = request.POST['muscle_group'] 
+        muscle_group = request.POST['muscle_group']
         weight = request.POST['weight']
         reps = request.POST['reps']
         notes = request.POST.get('notes', '')
@@ -94,7 +120,7 @@ def add_workout(request):
         Workout.objects.create(
             user=request.user,
             name=name,
-            muscle_group=muscle_group,  
+            muscle_group=muscle_group,
             weight=weight,
             reps=reps,
             notes=notes
@@ -110,13 +136,9 @@ def add_exercise(request):
     if not request.user.is_authenticated:
         return redirect('login')
 
-    from .models import Exercise  
-
-   
     muscle_groups = Workout.objects.filter(user=request.user).values_list('muscle_group', flat=True).distinct()
     workouts = None
 
-   
     selected_group = request.GET.get('muscle_group')
     if selected_group:
         workouts = Workout.objects.filter(user=request.user, muscle_group=selected_group)
@@ -158,14 +180,15 @@ def edit_workout(request, id):
         workout.name = request.POST['name']
         workout.weight = request.POST['weight']
         workout.reps = request.POST['reps']
-        workout.notes = request.POST.get('notes', '')  
+        workout.notes = request.POST.get('notes', '')
         workout.save()
         messages.success(request, 'Workout updated successfully!')
         return redirect('dashboard')
 
     return render(request, 'workouts/edit_workout.html', {'workout': workout})
 
-    # ---------- DELETE WORKOUT ----------
+
+# ---------- DELETE WORKOUT ----------
 def delete_workout(request, id):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -178,7 +201,9 @@ def delete_workout(request, id):
         return redirect('dashboard')
 
     return render(request, 'workouts/delete_workout.html', {'workout': workout})
-    # ---------- DELETE ACCOUNT ----------
+
+
+# ---------- DELETE ACCOUNT ----------
 def delete_account(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -190,5 +215,3 @@ def delete_account(request):
         return redirect('login')
 
     return render(request, 'workouts/delete_account.html')
-
-

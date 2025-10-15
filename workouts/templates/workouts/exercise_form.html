@@ -1,0 +1,80 @@
+{% extends 'workouts/base.html' %}
+{% load static %}
+
+{% block title %}Add Exercise{% endblock %}
+
+{% block content %}
+<h2>Add Exercise</h2>
+
+<form method="POST" class="exercise-form">
+    {% csrf_token %}
+
+    {% for message in messages %}
+    <p style="color:red;">{{ message }}</p>
+    {% endfor %}
+    <table>
+        {{ form.as_table }}
+    </table>
+
+    <button type="submit">Add Exercise</button>
+    
+</form>
+
+<style>
+    .exercise-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .exercise-form input,
+    .exercise-form textarea,
+    .exercise-form select {
+        width: 90%;
+        max-width: 400px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 15px;
+        background: rgba(255, 255, 255, 0.8);
+        color: #1d3557;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .exercise-form input:focus,
+    .exercise-form textarea:focus,
+    .exercise-form select:focus {
+        border-color: #457b9d;
+        box-shadow: 0 0 8px rgba(69, 123, 157, 0.4);
+        background: #fff;
+    }
+
+    .exercise-form button {
+        padding: 10px 20px;
+        background: #1d3557;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .exercise-form button:hover {
+        background: #457b9d;
+        transform: translateY(-2px);
+    }
+
+    h2 {
+        text-align: center;
+        color: #f1faee;
+    }
+</style>
+{% endblock %}
