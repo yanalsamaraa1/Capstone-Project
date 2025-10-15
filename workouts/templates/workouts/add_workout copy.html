@@ -1,10 +1,10 @@
 {% extends 'workouts/base.html' %}
 {% load static %}
 
-{% block title %}Edit Workout{% endblock %}
+{% block title %}Add Workout{% endblock %}
 
 {% block content %}
-<h2>Edit Workout</h2>
+<h2>Add Workout</h2>
 
 <form method="POST" class="workout-form">
     {% csrf_token %}
@@ -13,13 +13,22 @@
         <p style="color:red;">{{ message }}</p>
     {% endfor %}
 
-    <input type="text" name="name" value="{{ workout.name }}" placeholder="Workout Name" required><br>
-    <input type="number" step="0.01" name="weight" value="{{ workout.weight }}" placeholder="Weight (kg)" required><br>
-    <input type="number" name="reps" value="{{ workout.reps }}" placeholder="Reps" required><br>
+    <input type="text" name="name" placeholder="Workout Name" required><br>
 
-    <textarea name="notes" rows="3" placeholder="Write any notes about this workout...">{{ workout.notes }}</textarea><br>
+    <select name="muscle_group" required>
+        <option value="" disabled selected>Select Muscle Group</option>
+        <option value="Chest">Chest</option>
+        <option value="Back">Back</option>
+        <option value="Legs">Legs</option>
+        <option value="Arms">Arms</option>
+    </select><br>
 
-    <button type="submit">Save Changes</button>
+    <input type="number" step="0.01" name="weight" placeholder="Weight (kg)" required><br>
+    <input type="number" name="reps" placeholder="Reps" required><br>
+
+    <textarea name="notes" rows="3" placeholder="Write any notes about this workout..."></textarea><br>
+
+    <button type="submit">Add Workout</button>
 </form>
 
 <style>
@@ -35,7 +44,8 @@
     }
 
     .workout-form input,
-    .workout-form textarea {
+    .workout-form textarea,
+    .workout-form select {
         width: 90%;
         max-width: 400px;
         padding: 10px;
@@ -50,7 +60,8 @@
     }
 
     .workout-form input:focus,
-    .workout-form textarea:focus {
+    .workout-form textarea:focus,
+    .workout-form select:focus {
         border-color: #457b9d;
         box-shadow: 0 0 8px rgba(69, 123, 157, 0.4);
         background: #fff;

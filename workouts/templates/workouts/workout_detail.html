@@ -5,16 +5,95 @@
 {% block content %}
 <h2>Workout Details</h2>
 
-<div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 0 5px rgba(0,0,0,0.1);">
+<div class="workout-detail">
     <p><strong>Name:</strong> {{ workout.name }}</p>
+    <p><strong>Muscle Group:</strong> {{ workout.muscle_group }}</p>
     <p><strong>Weight:</strong> {{ workout.weight }} kg</p>
     <p><strong>Reps:</strong> {{ workout.reps }}</p>
     <p><strong>Date:</strong> {{ workout.date }}</p>
+    {% if workout.notes %}
+        <p><strong>Notes:</strong> {{ workout.notes|linebreaks }}</p>
+    {% endif %}
 </div>
 
-<p style="margin-top:15px;">
+<!-- 🏋️ Exercises Table -->
+{% if exercises %}
+    <h3>Exercises in This Workout</h3>
+    <table class="exercise-table">
+        <thead>
+            <tr>
+                <th>Exercise</th>
+                <th>Sets</th>
+                <th>Reps</th>
+                <th>Weight (kg)</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ex in exercises %}
+                <tr>
+                    <td>{{ ex.name }}</td>
+                    <td>{{ ex.sets }}</td>
+                    <td>{{ ex.reps }}</td>
+                    <td>{{ ex.weight }}</td>
+                    <td>{{ ex.notes }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p style="margin-top:15px; opacity:0.8;">No exercises yet for this workout.</p>
+{% endif %}
+
+<p class="buttons">
     <a href="{% url 'edit_workout' workout.id %}" class="button">✏️ Edit</a>
     <a href="{% url 'delete_workout' workout.id %}" class="button danger">🗑️ Delete</a>
     <a href="{% url 'dashboard' %}" class="button">⬅️ Back to Dashboard</a>
 </p>
+
+<style>
+.workout-detail {
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    color:#1d3557;
+    font-size:16px;
+    margin-bottom:25px;
+}
+
+.exercise-table {
+    width:100%;
+    max-width:700px;
+    margin:auto;
+    border-collapse:collapse;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.exercise-table th,
+.exercise-table td {
+    border:1px solid #ccc;
+    padding:10px 15px;
+    text-align:center;
+}
+
+.exercise-table th {
+    background:#1d3557;
+    color:#f1faee;
+}
+
+.exercise-table tr:nth-child(even) {
+    background:#f8f9fa;
+}
+
+.buttons {
+    margin-top:20px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+}
+</style>
 {% endblock %}

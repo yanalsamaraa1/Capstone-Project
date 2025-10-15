@@ -66,13 +66,14 @@
     </style>
 </head>
 <body>
-    <header>
-        <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
-        <a href="{% url 'add_workout' %}">➕ Add Workout</a>
-        <a href="{% url 'logout' %}">🚪 Logout</a>
-        <a href="{% url 'delete_account' %}">🧨 Delete Account</a>
+   <header>
+    <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+    <a href="{% url 'add_workout' %}">➕ Add Workout</a>
+    <a href="{% url 'add_exercise' %}">🏋️ Add Exercise</a>
+    <a href="{% url 'logout' %}">🚪 Logout</a>
+    <a href="{% url 'delete_account' %}">🧨 Delete Account</a>
+</header>
 
-    </header>
 
     <!-- ✅ Global message bar -->
     {% if messages %}
